@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const NotepadEdit = ({ notes, handleDeleteLine, handleSave }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -7,6 +7,17 @@ const NotepadEdit = ({ notes, handleDeleteLine, handleSave }) => {
   const [bg, setBg] = useState({});
 
   // Handle background change for a specific note
+  useEffect(() => {
+    const storeColor = localStorage.getItem('bg');
+    if (storeColor) {
+      setBg(JSON.parse(storeColor));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('bg', JSON.stringify(bg));
+  }, [bg]);
+
   const handleBg = (index, color) => {
     setBg((prev) => ({ ...prev, [index]: color }));
   };
@@ -31,8 +42,8 @@ const NotepadEdit = ({ notes, handleDeleteLine, handleSave }) => {
   };
 
   // Apply text formatting
-  const applyFormatting = (command) => {
-    document.execCommand(command, false, null);
+  const applyFormatting = (command, value) => {
+    document.execCommand(command, false, value);
   };
 
   return (
@@ -64,10 +75,112 @@ const NotepadEdit = ({ notes, handleDeleteLine, handleSave }) => {
             >
               Strikethrough
             </button>
+            <button
+              onClick={() => applyFormatting("subscript")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Subscript
+            </button>
+            <button
+              onClick={() => applyFormatting("superscript")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Superscript
+            </button>
+            <button
+              onClick={() => applyFormatting("insertUnorderedList")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Bullet List
+            </button>
+            <button
+              onClick={() => applyFormatting("insertOrderedList")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Numbered List
+            </button>
+            <button
+              onClick={() => applyFormatting("justifyLeft")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Justify Left
+            </button>
+            <button
+              onClick={() => applyFormatting("justifyCenter")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Center
+            </button>
+            <button
+              onClick={() => applyFormatting("justifyRight")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Justify Right
+            </button>
+            <button
+              onClick={() => applyFormatting("justifyFull")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Justify Full
+            </button>
+            <button
+              onClick={() => applyFormatting("fontName", "Arial")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Font Arial
+            </button>
+            <button
+              onClick={() => applyFormatting("fontSize", "4")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Font Size 4
+            </button>
+            <button
+              onClick={() => applyFormatting("foreColor", "red")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Red Text
+            </button>
+            <button
+              onClick={() => applyFormatting("backColor", "yellow")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Yellow Background
+            </button>
+            <button
+              onClick={() => applyFormatting("createLink", "http://")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Insert Link
+            </button>
+            <button
+              onClick={() => applyFormatting("unlink")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Unlink
+            </button>
+            <button
+              onClick={() => applyFormatting("insertImage", "image_url")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Insert Image
+            </button>
+            <button
+              onClick={() => applyFormatting("insertHorizontalRule")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Horizontal Line
+            </button>
+            <button
+              onClick={() => applyFormatting("removeFormat")}
+              className="bg-gray-300 px-2 py-1 rounded-md mx-1"
+            >
+              Remove Format
+            </button>
           </div>
           <div
             contentEditable
-            className="notepad-textarea bg-slate-700 text-white p-4 rounded-md"
+            className="notepad-textarea bg-slate-700 p-4 rounded-md"
             onInput={(e) => setCurrentNote(e.currentTarget.innerHTML)}
             dangerouslySetInnerHTML={{ __html: currentNote }}
           ></div>
